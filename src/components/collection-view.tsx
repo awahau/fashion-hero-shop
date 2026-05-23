@@ -81,7 +81,12 @@ export function CollectionView({ products, collectionName, initialSellerSlug }: 
         break;
     }
 
-    return result;
+    // Promoted products always surface first within the sorted results
+    return [...result].sort((a, b) => {
+      if (a.promoted && !b.promoted) return -1;
+      if (!a.promoted && b.promoted) return 1;
+      return 0;
+    });
   }, [products, gender, sort, priceRange, shoeTypes, materials, sizes, sellerSlugs]);
 
   const activeFilterCount =

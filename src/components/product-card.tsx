@@ -48,11 +48,15 @@ export function ProductCard({ product, className }: ProductCardProps) {
             className="relative aspect-square overflow-hidden mb-3"
             style={{ background: productGradient(firstColor.hex) }}
           >
-            {badgeLabel && (
+            {product.promoted ? (
+              <span className="absolute top-3 left-3 text-[10px] font-semibold uppercase tracking-wider bg-amber-400 text-white px-2 py-1 z-10">
+                Promowane
+              </span>
+            ) : badgeLabel ? (
               <span className="absolute top-3 left-3 text-[10px] font-medium uppercase tracking-wider bg-white/90 px-2 py-1 z-10">
                 {badgeLabel}
               </span>
-            )}
+            ) : null}
             {showImage ? (
               <Image
                 src={imageSrc}
