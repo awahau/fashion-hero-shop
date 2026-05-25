@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FilterSidebar, type GenderFilter, type PriceRange } from "@/components/filter-sidebar";
 import { ProductCard } from "@/components/product-card";
 import { ChevronDownIcon, CloseIcon } from "@/components/icons";
 import type { Product, ShoeType, ShoeMaterial } from "@/types";
 import { getSeller } from "@/data/sellers";
+import posthog from "posthog-js";
 
 type SortOption = "featured" | "price-asc" | "price-desc" | "newest";
 
@@ -24,6 +25,13 @@ interface CollectionViewProps {
 
 export function CollectionView({ products, collectionName, initialSellerSlug }: CollectionViewProps) {
   const [gender, setGender] = useState<GenderFilter>("all");
+
+  useEffect(() => {
+    posthog.capture("collection_viewed", {
+      collection_name: collectionName,
+      product_count: products.length,
+    });
+  }, [collectionName, products.length]);
   const [sort, setSort] = useState<SortOption>("featured");
   const [priceRange, setPriceRange] = useState<PriceRange>("all");
   const [shoeTypes, setShoeTypes] = useState<ShoeType[]>([]);
